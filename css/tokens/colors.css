@@ -1,0 +1,83 @@
+:root {
+  /* --- Tinta: negro puro a blanco puro. El sistema vive aqui. --- */
+  --ink-1000: #000000;
+  --ink-900: #0a0a0a;
+  --ink-800: #121212;
+  --ink-700: #1c1c1c;
+  --ink-600: #2a2a2a;
+  --ink-500: #3d3d3d;
+  --ink-400: #5c5c5c;
+  --ink-300: #8a8a8a;
+  --ink-200: #b8b8b8;
+  --ink-100: #e4e4e4;
+  --ink-000: #ffffff;
+
+  /* --- Senal primaria: magenta acido --- */
+  --signal-900: #2e0014;
+  --signal-700: #99003a;
+  --signal-500: #ff0057;
+  --signal-300: #ff6f9d;
+  --signal-100: #ffd6e3;
+
+  /* --- Senal secundaria: lima de terminal --- */
+  --acid-900: #1f2600;
+  --acid-700: #85a300;
+  --acid-500: #ccff00;
+  --acid-300: #e2ff66;
+  --acid-100: #f5ffcc;
+
+  /* --- Senal terciaria: azul de pantalla --- */
+  --volt-900: #000f3d;
+  --volt-700: #0026a3;
+  --volt-500: #0f3dff;
+  --volt-300: #6f8bff;
+  --volt-100: #d6deff;
+
+  /* --- Alias semanticos --- */
+  --bg: var(--ink-1000);
+  --bg-inverse: var(--ink-000);
+  --surface: var(--ink-900);
+  --surface-raised: var(--ink-800);
+  --surface-sunken: var(--ink-1000);
+
+  --text: var(--ink-000);
+  --text-muted: var(--ink-300);
+  --text-faint: var(--ink-500);
+  --text-inverse: var(--ink-1000);
+
+  --line: var(--ink-600);
+  --line-strong: var(--ink-000);
+  --line-signal: var(--signal-500);
+
+  --accent: var(--signal-500);
+  --accent-text: var(--ink-000);
+  --accent-2: var(--acid-500);
+  --accent-3: var(--volt-500);
+
+  --ok: var(--acid-500);
+  --warn: var(--acid-500);
+  --danger: var(--signal-500);
+  --focus: var(--acid-500);
+
+  --selection-bg: var(--signal-500);
+  --selection-text: var(--ink-000);
+
+  /* Tramas: el sistema no usa fotografia decorativa, usa retícula. */
+  --grid-line: rgba(255, 255, 255, 0.12);
+  --scanline: rgba(255, 255, 255, 0.045);
+}
+
+/* Bloque claro: invertir es un gesto de layout, no un tema aparte. */
+.invert, [data-scheme="light"] {
+  --bg: var(--ink-000);
+  --surface: var(--ink-000);
+  --surface-raised: var(--ink-100);
+  --text: var(--ink-1000);
+  --text-muted: var(--ink-400);
+  --text-faint: var(--ink-300);
+  --line: var(--ink-200);
+  --line-strong: var(--ink-1000);
+  --text-inverse: var(--ink-000);
+  --grid-line: rgba(0, 0, 0, 0.14);
+  --scanline: rgba(0, 0, 0, 0.04);
+}

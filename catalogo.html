@@ -3,51 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Catálogo | Bloque</title>
+  <title>Tienda | BLOQUE</title>
+  <link rel="icon" href="img/isotipo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <!-- Cabecera (igual en todas las páginas) -->
-  <header>
-    <div class="contenedor">
-      <a href="index.html" class="logo">Bloque</a>
-      <nav>
-        <a href="index.html">Inicio</a>
-        <a href="catalogo.html">Catálogo</a>
-        <a href="carrito.html">Carrito <span id="contador-carrito">0</span></a>
-      </nav>
-    </div>
-  </header>
+  <!-- La cabecera y el pie se pintan desde js/app.js -->
+  <div id="cabecera" data-activa="catalogo"></div>
 
-  <section>
-    <div class="contenedor">
-      <h2>Catálogo</h2>
-      <div class="filtros" id="filtros"></div>
-      <div class="rejilla" id="lista"></div>
-    </div>
+  <section class="banda">
+    <h1><span class="fino">TODO LO QUE</span> HAY</h1>
   </section>
 
-  <footer>© 2026 Bloque · Todos los derechos reservados</footer>
+  <div class="filtros" id="filtros"></div>
+  <div class="rejilla" id="lista"></div>
+
+  <div id="pie"></div>
 
   <!-- Primero los datos, luego las funciones comunes, luego el script de la página -->
   <script src="js/productos.js"></script>
   <script src="js/app.js"></script>
-
   <script>
-    // Sacamos las categorías sin repetir a partir de los productos
-    const categorias = ["todo", ...new Set(PRODUCTOS.map(p => p.categoria))];
-
-    function mostrar(categoria) {
-      const lista = categoria === "todo" ? PRODUCTOS : PRODUCTOS.filter(p => p.categoria === categoria);
+    function mostrar(seccion) {
+      const lista = seccion === "Todo" ? PRODUCTOS : PRODUCTOS.filter(p => p.seccion === seccion);
       document.getElementById("lista").innerHTML = lista.map(htmlTarjeta).join("");
 
-      // Pintamos los botones de filtro marcando el activo
-      document.getElementById("filtros").innerHTML = categorias.map(c =>
-        `<button class="${c === categoria ? "activo" : ""}" onclick="mostrar('${c}')">${c}</button>`
+      // Botones de filtro (marcando el activo) + contador de prendas a la derecha
+      const botones = SECCIONES.map(s =>
+        `<button class="${s === seccion ? "activo" : ""}" onclick="mostrar('${s}')">${s}</button>`
       ).join("");
+      document.getElementById("filtros").innerHTML =
+        botones + `<span class="label contador">${dosCifras(lista.length)} prendas</span>`;
     }
 
-    mostrar("todo");
+    mostrar("Todo");
   </script>
 </body>
 </html>

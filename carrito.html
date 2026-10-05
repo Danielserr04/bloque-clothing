@@ -3,75 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carrito | Bloque</title>
+  <title>Carro | BLOQUE</title>
+  <link rel="icon" href="img/isotipo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <!-- Cabecera (igual en todas las páginas) -->
-  <header>
-    <div class="contenedor">
-      <a href="index.html" class="logo">Bloque</a>
-      <nav>
-        <a href="index.html">Inicio</a>
-        <a href="catalogo.html">Catálogo</a>
-        <a href="carrito.html">Carrito <span id="contador-carrito">0</span></a>
-      </nav>
-    </div>
-  </header>
+  <!-- La cabecera y el pie se pintan desde js/app.js -->
+  <div id="cabecera" data-activa="carrito"></div>
 
-  <section>
-    <div class="contenedor">
-      <h2>Tu carrito</h2>
-      <div id="carrito"></div>
+  <div class="carro">
+    <div class="carro-lineas">
+      <div class="carro-titulo">
+        <h1>CARRO</h1>
+        <span class="label" id="num-lineas">00 líneas</span>
+      </div>
+      <div id="lineas"></div>
     </div>
-  </section>
+    <aside class="carro-resumen" id="resumen"></aside>
+  </div>
 
-  <footer>© 2026 Bloque · Todos los derechos reservados</footer>
+  <div id="pie"></div>
 
   <!-- Primero los datos, luego las funciones comunes, luego el script de la página -->
   <script src="js/productos.js"></script>
   <script src="js/app.js"></script>
-
   <script>
     function pintarCarrito() {
       const carrito = leerCarrito();
-      const caja = document.getElementById("carrito");
+      document.getElementById("num-lineas").textContent = dosCifras(carrito.length) + " líneas";
 
+      // Tabla de líneas (o mensaje si está vacío)
+      let total = 0;
       if (carrito.length === 0) {
-        caja.innerHTML = '<p>Tu carrito está vacío. <a href="catalogo.html"><u>Ir al catálogo</u></a></p>';
-        return;
+        document.getElementById("lineas").innerHTML = `
+          <div class="carro-vacio">
+            <p>Vacío. Todavía no has cogido nada de la percha.</p>
+            <a href="catalogo.html" class="boton">Ir a la tienda</a>
+          </div>`;
+      } else {
+        const filas = carrito.map((item, index) => {
+          const p = buscarProducto(item.id);
+          const importe = p.precio * item.cantidad;
+          total += importe;
+          return `
+            <tr>
+              <td class="ref">${p.ref}</td>
+              <td>${p.nombre} <span class="talla">— T. ${item.talla}</span></td>
+              <td class="derecha">
+                <div class="stepper">
+                  <button onclick="cambiar(${index}, -1)" aria-label="Quitar uno">−</button>
+                  <span>${item.cantidad}</span>
+                  <button onclick="cambiar(${index}, 1)" aria-label="Añadir uno">+</button>
+                </div>
+              </td>
+              <td class="derecha">${formatearPrecio(importe)}</td>
+              <td class="derecha"><button class="quitar" onclick="quitar(${index})" aria-label="Quitar ${p.nombre}">✕</button></td>
+            </tr>`;
+        }).join("");
+
+        document.getElementById("lineas").innerHTML = `
+          <table class="tabla-carro">
+            <thead><tr><th class="ref">Ref</th><th>Artículo</th><th class="derecha">Cant</th><th class="derecha">Importe</th><th></th></tr></thead>
+            <tbody>${filas}</tbody>
+          </table>`;
       }
 
-      let total = 0;
-      const lineas = carrito.map((item, index) => {
-        const p = buscarProducto(item.id);
-        const subtotal = p.precio * item.cantidad;
-        total += subtotal;
-        return `
-          <div class="linea">
-            ${htmlImagen(p)}
-            <div>
-              <strong>${p.nombre}</strong><br>
-              <span class="precio">Talla ${item.talla} · ${formatearPrecio(p.precio)}</span>
-            </div>
-            <div class="cantidad">
-              <button onclick="cambiar(${index}, -1)">−</button>
-              <span>${item.cantidad}</span>
-              <button onclick="cambiar(${index}, 1)">+</button>
-            </div>
-            <strong>${formatearPrecio(subtotal)}</strong>
-          </div>`;
-      }).join("");
-
-      caja.innerHTML = lineas + `
-        <div class="total">
-          Total: <strong>${formatearPrecio(total)}</strong><br>
-          <button class="boton" onclick="pagar()">Finalizar compra</button>
-        </div>`;
+      // Columna de totales
+      document.getElementById("resumen").innerHTML = `
+        <span class="tag tag-acido">Recogida en 2 h</span>
+        <dl class="resumen">
+          <div><dt>Subtotal</dt><dd>${formatearPrecio(total)}</dd></div>
+          <div><dt>Entrega</dt><dd>Se elige después</dd></div>
+          <div><dt>IVA</dt><dd>Incluido</dd></div>
+        </dl>
+        <div>
+          <span class="label">Total</span>
+          <div class="total-grande">${formatearPrecio(total)}</div>
+        </div>
+        <button class="boton boton-lg boton-senal" onclick="pagar()" ${carrito.length === 0 ? "disabled" : ""}>Tramitar pedido</button>
+        <a href="catalogo.html" class="boton boton-sm boton-fantasma">Seguir comprando</a>`;
     }
 
-    function cambiar(index, cambio) {
-      cambiarCantidad(index, cambio);
+    function cambiar(index, paso) {
+      cambiarCantidad(index, paso);
+      pintarCarrito();
+    }
+
+    function quitar(index) {
+      quitarDelCarrito(index);
       pintarCarrito();
     }
 
