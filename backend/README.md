@@ -12,7 +12,7 @@ cd backend
 ```
 
 Arranca en `http://localhost:8080` con el perfil **dev**: base de datos H2 en memoria (se borra al parar),
-los 6 productos de ejemplo y un admin `admin@bloque.local` / `Admin1234` (solo en dev).
+los 8 productos de ejemplo (los mismos que `js/productos.js`) y un admin `admin@bloque.local` / `Admin1234` (solo en dev).
 
 Para probar la API a mano: abre [`peticiones.http`](peticiones.http) (extensión "REST Client" en VS Code).
 

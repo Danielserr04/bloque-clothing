@@ -59,21 +59,27 @@ class DatosIniciales implements ApplicationRunner {
 
     private static List<Producto> demo() {
         return List.of(
-                p("Camiseta Básica Negra", "camisetas", "19.99", "#222222", List.of("S", "M", "L", "XL"),
-                        "Camiseta de algodón 100% con corte regular. Un básico que combina con todo."),
-                p("Camiseta Oversize Blanca", "camisetas", "24.99", "#e9e6e0", List.of("S", "M", "L", "XL"),
-                        "Corte amplio y tejido grueso para un look urbano."),
-                p("Sudadera Logo Gris", "sudaderas", "44.99", "#8a8d91", List.of("S", "M", "L", "XL"),
-                        "Sudadera con capucha, interior perchado y logo bordado."),
-                p("Sudadera Crew Verde", "sudaderas", "39.99", "#4b5d48", List.of("M", "L", "XL"),
-                        "Cuello redondo, tacto suave y color verde oliva."),
-                p("Pantalón Cargo Beige", "pantalones", "49.99", "#c8b59a", List.of("38", "40", "42", "44"),
-                        "Pantalón cargo con bolsillos laterales y ajuste relajado."),
-                p("Gorra Clásica", "accesorios", "14.99", "#2f3e5c", List.of("Única"),
-                        "Gorra de seis paneles con cierre ajustable."));
+                p("0042", "Camiseta caja 240g", "Camisetas", "28.00", 12, "\u25A0", "Negro",
+                        List.of("S", "M", "L", "XL"), List.of("S"), "Algodón peinado 240 g, corte caja, cuello reforzado."),
+                p("0043", "Pantalón carpenter", "Pantalones", "74.00", 4, "\u25AE", "Crudo",
+                        List.of("38", "40", "42", "44"), List.of(), "Lona de algodón 12 oz, pierna recta, martillera lateral."),
+                p("0055", "Parka técnica", "Abrigos", "189.00", 2, "\u25B2", "Negro",
+                        List.of("M", "L", "XL"), List.of("XL"), "Nylon recubierto, costuras selladas, capucha ajustable."),
+                p("0061", "Jersey lana gruesa", "Punto", "96.00", 6, "\u25CF", "Gris",
+                        List.of("S", "M", "L"), List.of(), "Lana virgen, punto inglés, cuello alto."),
+                p("0072", "Bota de cuero", "Calzado", "168.00", 0, "\u25C6", "Negro",
+                        List.of("41", "42", "43", "44"), List.of("41", "42", "43", "44"), "Cuero engrasado, suela cosida, horma ancha."),
+                p("0080", "Camisa overshirt", "Camisetas", "82.00", 8, "\u25AC", "Verde",
+                        List.of("S", "M", "L", "XL"), List.of(), "Sarga de algodón, doble bolsillo, botón de corozo."),
+                p("0091", "Vaquero rígido", "Pantalones", "110.00", 3, "\u25AF", "Índigo",
+                        List.of("38", "40", "42"), List.of(), "Denim selvedge 14 oz sin lavar. Encoge media talla."),
+                p("0103", "Gorro punto", "Punto", "24.00", 20, "\u25D0", "Negro",
+                        List.of("Única"), List.of(), "Lana merino, vuelta doble."));
     }
 
-    private static Producto p(String nombre, String cat, String precio, String color, List<String> tallas, String desc) {
-        return new Producto(null, nombre, cat, new BigDecimal(precio), color, "", tallas, desc);
+    private static Producto p(String ref, String nombre, String seccion, String precio, int stock, String marca,
+                              String color, List<String> tallas, List<String> agotadas, String desc) {
+        return new Producto(null, ref, nombre, seccion, new BigDecimal(precio), stock, marca, color, "", tallas,
+                agotadas, desc);
     }
 }

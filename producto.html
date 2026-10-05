@@ -17,18 +17,27 @@
 
   <!-- Primero los datos, luego las funciones comunes, luego el script de la página -->
   <script src="js/productos.js"></script>
+  <script src="js/api.js"></script>
   <script src="js/app.js"></script>
   <script>
     // Leemos el id de la URL: producto.html?id=3
     const id = new URLSearchParams(window.location.search).get("id");
-    const producto = buscarProducto(id);
+    let producto = null;
     let tallaElegida = null;
     let cantidad = 1;
 
-    if (!producto) {
-      document.getElementById("ficha").innerHTML =
-        '<section class="banda"><h1>NO EXISTE</h1><p><a href="catalogo.html" class="boton">Volver a la tienda</a></p></section>';
-    } else {
+    // Primero pedimos los productos al backend y luego pintamos la ficha
+    cargarProductos().then(() => {
+      producto = buscarProducto(id);
+      pintarFicha();
+    });
+
+    function pintarFicha() {
+      if (!producto) {
+        document.getElementById("ficha").innerHTML =
+          '<section class="banda"><h1>NO EXISTE</h1><p><a href="catalogo.html" class="boton">Volver a la tienda</a></p></section>';
+        return;
+      }
       document.title = producto.nombre + " | BLOQUE";
       const agotado = producto.stock === 0;
 
@@ -45,9 +54,10 @@
         ["Cambios", "30 días en tienda"]
       ];
 
+      // Todo lo que viene de la API pasa por escapar() antes de ir al HTML
       document.getElementById("ficha").innerHTML = `
         <div class="migas label">
-          <a href="catalogo.html">Tienda</a> / ${producto.seccion} / Ref. ${producto.ref}
+          <a href="catalogo.html">Tienda</a> / ${escapar(producto.seccion)} / Ref. ${escapar(producto.ref)}
         </div>
         <section class="ficha">
           <div class="ficha-media">
@@ -55,19 +65,19 @@
             <span class="tarjeta-tag">${agotado ? '<span class="tag tag-papel">Agotado</span>' : '<span class="tag tag-acido">Probador libre <i class="parpadeo">■</i></span>'}</span>
           </div>
           <div class="ficha-info">
-            <h1>${producto.nombre}</h1>
-            <p>${producto.descripcion}</p>
+            <h1>${escapar(producto.nombre)}</h1>
+            <p>${escapar(producto.descripcion)}</p>
 
             <table class="tabla-tecnica">
-              ${datos.map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join("")}
+              ${datos.map(([k, v]) => `<tr><th>${k}</th><td>${escapar(v)}</td></tr>`).join("")}
             </table>
 
             <span class="label">Talla</span>
             <div class="tallas">
-              ${producto.tallas.map(t => {
+              ${producto.tallas.map((t, i) => {
                 const fuera = producto.agotadas.includes(t);
                 const activa = t === tallaElegida ? "activo" : "";
-                return `<button class="${activa}" ${fuera ? "disabled" : ""} onclick="elegirTalla(this, '${t}')">${t}</button>`;
+                return `<button class="${activa}" ${fuera ? "disabled" : ""} onclick="elegirTalla(this, ${i})">${escapar(t)}</button>`;
               }).join("")}
             </div>
 
@@ -92,8 +102,9 @@
         </section>`;
     }
 
-    function elegirTalla(boton, talla) {
-      tallaElegida = talla;
+    // Recibimos la posición de la talla (no el texto) para no meter datos de la API dentro del onclick
+    function elegirTalla(boton, indice) {
+      tallaElegida = producto.tallas[indice];
       document.querySelectorAll(".tallas button").forEach(b => b.classList.remove("activo"));
       boton.classList.add("activo");
       document.getElementById("error").textContent = "";

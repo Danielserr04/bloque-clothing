@@ -26,10 +26,13 @@
 
   <!-- Primero los datos, luego las funciones comunes, luego el script de la página -->
   <script src="js/productos.js"></script>
+  <script src="js/api.js"></script>
   <script src="js/app.js"></script>
   <script>
     function pintarCarrito() {
-      const carrito = leerCarrito();
+      // Quitamos del carro las líneas de productos que ya no existen en el catálogo
+      const carrito = leerCarrito().filter(item => buscarProducto(item.id));
+      guardarCarrito(carrito);
       document.getElementById("num-lineas").textContent = dosCifras(carrito.length) + " líneas";
 
       // Tabla de líneas (o mensaje si está vacío)
@@ -47,8 +50,8 @@
           total += importe;
           return `
             <tr>
-              <td class="ref">${p.ref}</td>
-              <td>${p.nombre} <span class="talla">— T. ${item.talla}</span></td>
+              <td class="ref">${escapar(p.ref)}</td>
+              <td>${escapar(p.nombre)} <span class="talla">— T. ${escapar(item.talla)}</span></td>
               <td class="derecha">
                 <div class="stepper">
                   <button onclick="cambiar(${index}, -1)" aria-label="Quitar uno">−</button>
@@ -57,7 +60,7 @@
                 </div>
               </td>
               <td class="derecha">${formatearPrecio(importe)}</td>
-              <td class="derecha"><button class="quitar" onclick="quitar(${index})" aria-label="Quitar ${p.nombre}">✕</button></td>
+              <td class="derecha"><button class="quitar" onclick="quitar(${index})" aria-label="Quitar ${escapar(p.nombre)}">✕</button></td>
             </tr>`;
         }).join("");
 
@@ -94,12 +97,17 @@
       pintarCarrito();
     }
 
-    // El pago real (Stripe) se conectará más adelante
+    // Para tramitar el pedido hay que tener cuenta. El pago real (Stripe) se conectará más adelante.
     function pagar() {
+      if (!haySesion()) {
+        window.location.href = "cuenta.html?volver=carrito";
+        return;
+      }
       alert("El pago todavía no está conectado. Lo añadiremos con Stripe.");
     }
 
-    pintarCarrito();
+    // Primero pedimos los productos al backend y luego pintamos el carro
+    cargarProductos().then(pintarCarrito);
   </script>
 </body>
 </html>

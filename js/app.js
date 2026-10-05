@@ -55,6 +55,18 @@ function formatearPrecio(numero) {
   return numero.toFixed(2).replace(".", ",") + " €";
 }
 
+// Escapa texto antes de meterlo en innerHTML.
+// Los productos vienen de la API: si alguien guardara "<script>" en un nombre,
+// sin esto se ejecutaría en la web (ataque XSS).
+function escapar(texto) {
+  return String(texto ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 // Rellena con ceros a dos cifras: 8 -> "08"
 function dosCifras(numero) {
   return String(numero).padStart(2, "0");
@@ -63,9 +75,9 @@ function dosCifras(numero) {
 // HTML de la "foto": usa la imagen si existe, si no la retícula con el símbolo del producto
 function htmlImagen(producto) {
   if (producto.imagen) {
-    return `<img class="media" src="${producto.imagen}" alt="${producto.nombre}">`;
+    return `<img class="media" src="${escapar(producto.imagen)}" alt="${escapar(producto.nombre)}">`;
   }
-  return `<div class="media reticula"><span class="simbolo">${producto.marca}</span></div>`;
+  return `<div class="media reticula"><span class="simbolo">${escapar(producto.marca)}</span></div>`;
 }
 
 // Etiqueta de stock que va encima de la imagen
@@ -79,16 +91,16 @@ function htmlEtiquetaStock(producto) {
 function htmlTarjeta(producto) {
   const meta = producto.stock === 0 ? "Agotado" : producto.tallas.join(" ");
   return `
-    <a class="tarjeta" href="producto.html?id=${producto.id}">
+    <a class="tarjeta" href="producto.html?id=${encodeURIComponent(producto.id)}">
       <div class="tarjeta-media">
         ${htmlImagen(producto)}
         <span class="tarjeta-tag">${htmlEtiquetaStock(producto)}</span>
       </div>
       <div class="tarjeta-cuerpo">
-        <span class="kicker">${producto.seccion} / ${producto.ref}</span>
-        <h3>${producto.nombre}</h3>
+        <span class="kicker">${escapar(producto.seccion)} / ${escapar(producto.ref)}</span>
+        <h3>${escapar(producto.nombre)}</h3>
         <div class="tarjeta-pie">
-          <span class="meta">${meta}</span>
+          <span class="meta">${escapar(meta)}</span>
           <span class="precio">${formatearPrecio(producto.precio)}</span>
         </div>
       </div>
@@ -103,7 +115,7 @@ const AVISOS = ["Recogida en tienda en 2 h", "Reparto local 3,90 €", "Abierto 
 function pintarCabecera() {
   const caja = document.getElementById("cabecera");
   if (!caja) return;
-  const activa = caja.dataset.activa; // "inicio", "catalogo" o "carrito"
+  const activa = caja.dataset.activa; // "index", "catalogo", "cuenta" o "carrito"
   const enlace = (pagina, texto) =>
     `<a href="${pagina}.html" class="${pagina === activa ? "activo" : ""}">${texto}</a>`;
 
@@ -119,6 +131,7 @@ function pintarCabecera() {
       <nav>
         ${enlace("index", "Inicio")}
         ${enlace("catalogo", "Tienda")}
+        ${enlace("cuenta", typeof haySesion === "function" && haySesion() ? "Mi cuenta" : "Entrar")}
         <span class="nav-codigo">ES / 08014</span>
       </nav>
       <div class="nav-derecha">
@@ -157,9 +170,9 @@ function mostrarAviso(codigo, titulo, texto) {
     document.body.appendChild(aviso);
   }
   aviso.innerHTML = `
-    <span class="label">${codigo}</span>
-    <strong>${titulo}</strong>
-    <span>${texto}</span>
+    <span class="label">${escapar(codigo)}</span>
+    <strong>${escapar(titulo)}</strong>
+    <span>${escapar(texto)}</span>
     <a href="carrito.html" class="boton boton-sm boton-tinta">Ver carro</a>`;
   aviso.classList.add("visible");
   clearTimeout(aviso.temporizador);

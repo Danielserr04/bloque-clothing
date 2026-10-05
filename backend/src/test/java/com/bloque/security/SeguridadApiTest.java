@@ -48,8 +48,8 @@ class SeguridadApiTest {
     private static final String ADMIN_EMAIL = "admin@bloque.local";
     private static final String ADMIN_PASS = "Admin1234";
     private static final String PRODUCTO_JSON = """
-            {"nombre":"Camiseta Test","categoria":"camisetas","precio":19.99,
-             "color":"#000000","tallas":["M","L"],"descripcion":"test"}""";
+            {"ref":"9999","nombre":"Camiseta Test","seccion":"Camisetas","precio":19.99,"stock":5,
+             "marca":"■","color":"Negro","tallas":["M","L"],"agotadas":["L"],"descripcion":"test"}""";
 
     @Autowired MockMvc mvc;
     @Autowired ObjectMapper json;
@@ -300,6 +300,31 @@ class SeguridadApiTest {
             mvc.perform(jsonPost("/api/productos", PRODUCTO_JSON.replace("19.99", "-5"))
                             .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin()))
                     .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void productoConStockNegativoDa400() throws Exception {
+            mvc.perform(jsonPost("/api/productos", PRODUCTO_JSON.replace("\"stock\":5", "\"stock\":-1"))
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin()))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void productoConTallaAgotadaQueNoExisteDa400() throws Exception {
+            mvc.perform(jsonPost("/api/productos", PRODUCTO_JSON.replace("\"agotadas\":[\"L\"]", "\"agotadas\":[\"XXL\"]"))
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin()))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void catalogoDevuelveLosCamposQueUsaLaWeb() throws Exception {
+            mvc.perform(get("/api/productos"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$[0].ref").isString())
+                    .andExpect(jsonPath("$[0].seccion").isString())
+                    .andExpect(jsonPath("$[0].stock").isNumber())
+                    .andExpect(jsonPath("$[0].marca").isString())
+                    .andExpect(jsonPath("$[0].agotadas").isArray());
         }
 
         @Test
