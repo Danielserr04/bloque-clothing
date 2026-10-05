@@ -9,3 +9,6 @@ Thumbs.db
 # Dependencias y variables de entorno (para cuando añadamos Stripe)
 node_modules/
 .env
+
+# Backend (Java)
+backend/target/

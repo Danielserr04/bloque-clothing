@@ -1,0 +1,21 @@
+# Perfil de DESARROLLO: base de datos H2 en memoria (se borra al parar la app).
+spring:
+  datasource:
+    url: jdbc:h2:mem:bloque;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+bloque:
+  jwt:
+    # SOLO para desarrollo. En producción se usa la variable de entorno JWT_SECRET.
+    secret: ${JWT_SECRET:dev-secret-solo-para-local-cambiar-en-produccion-123456}
+  admin:
+    email: admin@bloque.local
+    password: Admin1234
+  cargar-productos-demo: true
+  cors:
+    # Live Server de VS Code y similares
+    origenes: http://localhost:5500,http://127.0.0.1:5500,http://localhost:3000

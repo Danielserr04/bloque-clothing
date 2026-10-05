@@ -1,0 +1,20 @@
+# Perfil de PRODUCCIÓN: PostgreSQL. Todos los secretos vienen de variables de entorno.
+# Si falta alguna obligatoria (JWT_SECRET, DB_URL...), la app no arranca: mejor que arrancar insegura.
+spring:
+  datasource:
+    url: ${DB_URL}              # ej: jdbc:postgresql://localhost:5432/bloque
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update          # TODO: pasar a Flyway cuando haya datos reales
+
+bloque:
+  jwt:
+    secret: ${JWT_SECRET}
+  admin:
+    email: ${ADMIN_EMAIL:}
+    password: ${ADMIN_PASSWORD:}
+  cargar-productos-demo: false
+  cors:
+    origenes: ${CORS_ORIGENES}  # ej: https://bloque.es

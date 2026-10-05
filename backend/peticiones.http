@@ -1,0 +1,50 @@
+### Peticiones de ejemplo para probar la API a mano.
+### En VS Code instala la extensión "REST Client" y pulsa "Send Request" encima de cada una.
+### (En IntelliJ funciona igual sin instalar nada.)
+
+@api = http://localhost:8080/api
+
+### 1. Catálogo (público, sin token)
+GET {{api}}/productos
+
+### 2. Registro de un cliente
+POST {{api}}/auth/registro
+Content-Type: application/json
+
+{ "email": "cliente@test.com", "password": "secreta123", "nombre": "Cliente" }
+
+### 3. Login como cliente -> copia el accessToken de la respuesta
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{ "email": "cliente@test.com", "password": "secreta123" }
+
+### 4. Login como admin (usuario de desarrollo)
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{ "email": "admin@bloque.local", "password": "Admin1234" }
+
+### 5. ¿Quién soy? (pega tu accessToken)
+GET {{api}}/usuarios/me
+Authorization: Bearer PEGA_AQUI_EL_TOKEN
+
+### 6. Crear producto: con token de cliente -> 403. Con token de admin -> 201
+POST {{api}}/productos
+Authorization: Bearer PEGA_AQUI_EL_TOKEN
+Content-Type: application/json
+
+{ "nombre": "Sudadera Nueva", "categoria": "sudaderas", "precio": 49.90,
+  "color": "#111111", "tallas": ["S","M","L"], "descripcion": "Prueba" }
+
+### 7. Pedir tokens nuevos con el refresh token (el viejo deja de valer)
+POST {{api}}/auth/refresh
+Content-Type: application/json
+
+{ "refreshToken": "PEGA_AQUI_EL_REFRESH_TOKEN" }
+
+### 8. Cerrar sesión (invalida el refresh token)
+POST {{api}}/auth/logout
+Content-Type: application/json
+
+{ "refreshToken": "PEGA_AQUI_EL_REFRESH_TOKEN" }

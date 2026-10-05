@@ -1,0 +1,23 @@
+# Configuración común. Por defecto arranca con el perfil "dev".
+spring:
+  application:
+    name: bloque-backend
+  profiles:
+    default: dev
+  jpa:
+    open-in-view: false
+
+server:
+  port: 8080
+  error:
+    include-stacktrace: never
+    include-message: never
+
+bloque:
+  jwt:
+    issuer: bloque-api
+    access-token-minutos: 15   # el access token dura poco
+    refresh-token-dias: 7      # el refresh token sirve para pedir otro sin volver a hacer login
+  login:
+    max-intentos: 5            # fallos seguidos antes de bloquear ese email
+    bloqueo-minutos: 15
