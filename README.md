@@ -1,4 +1,4 @@
-# Clothing Brand · Tienda online
+# Bloque · Tienda online
 
 Web estática (HTML, CSS y JavaScript sin frameworks).
 
