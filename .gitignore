@@ -1,0 +1,11 @@
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+
+# Dependencias y variables de entorno (para cuando añadamos Stripe)
+node_modules/
+.env

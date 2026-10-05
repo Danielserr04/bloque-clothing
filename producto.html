@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Producto | Clothing Brand</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Cabecera (igual en todas las páginas) -->
+  <header>
+    <div class="contenedor">
+      <a href="index.html" class="logo">Clothing Brand</a>
+      <nav>
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="carrito.html">Carrito <span id="contador-carrito">0</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <section>
+    <div class="contenedor" id="ficha"></div>
+  </section>
+
+  <footer>© 2026 Clothing Brand · Todos los derechos reservados</footer>
+
+  <!-- Primero los datos, luego las funciones comunes, luego el script de la página -->
+  <script src="js/productos.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    // Leemos el id de la URL: producto.html?id=3
+    const id = new URLSearchParams(window.location.search).get("id");
+    const producto = buscarProducto(id);
+    let tallaElegida = null;
+
+    if (!producto) {
+      document.getElementById("ficha").innerHTML = '<p>Producto no encontrado. <a href="catalogo.html">Volver al catálogo</a></p>';
+    } else {
+      document.title = producto.nombre + " | Clothing Brand";
+      document.getElementById("ficha").innerHTML = `
+        <div class="ficha">
+          ${htmlImagen(producto)}
+          <div>
+            <h1>${producto.nombre}</h1>
+            <p class="precio">${formatearPrecio(producto.precio)}</p>
+            <p>${producto.descripcion}</p>
+            <p><strong>Talla</strong></p>
+            <div class="tallas">
+              ${producto.tallas.map(t => `<button onclick="elegirTalla(this, '${t}')">${t}</button>`).join("")}
+            </div>
+            <button class="boton" onclick="anadir()">Añadir al carrito</button>
+            <p class="mensaje" id="mensaje"></p>
+          </div>
+        </div>`;
+    }
+
+    function elegirTalla(boton, talla) {
+      tallaElegida = talla;
+      document.querySelectorAll(".tallas button").forEach(b => b.classList.remove("activo"));
+      boton.classList.add("activo");
+    }
+
+    function anadir() {
+      const mensaje = document.getElementById("mensaje");
+      if (!tallaElegida) {
+        mensaje.style.color = "crimson";
+        mensaje.textContent = "Elige una talla primero.";
+        return;
+      }
+      anadirAlCarrito(producto.id, tallaElegida);
+      mensaje.style.color = "green";
+      mensaje.textContent = "Añadido al carrito ✓";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo | Clothing Brand</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Cabecera (igual en todas las páginas) -->
+  <header>
+    <div class="contenedor">
+      <a href="index.html" class="logo">Clothing Brand</a>
+      <nav>
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="carrito.html">Carrito <span id="contador-carrito">0</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <section>
+    <div class="contenedor">
+      <h2>Catálogo</h2>
+      <div class="filtros" id="filtros"></div>
+      <div class="rejilla" id="lista"></div>
+    </div>
+  </section>
+
+  <footer>© 2026 Clothing Brand · Todos los derechos reservados</footer>
+
+  <!-- Primero los datos, luego las funciones comunes, luego el script de la página -->
+  <script src="js/productos.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    // Sacamos las categorías sin repetir a partir de los productos
+    const categorias = ["todo", ...new Set(PRODUCTOS.map(p => p.categoria))];
+
+    function mostrar(categoria) {
+      const lista = categoria === "todo" ? PRODUCTOS : PRODUCTOS.filter(p => p.categoria === categoria);
+      document.getElementById("lista").innerHTML = lista.map(htmlTarjeta).join("");
+
+      // Pintamos los botones de filtro marcando el activo
+      document.getElementById("filtros").innerHTML = categorias.map(c =>
+        `<button class="${c === categoria ? "activo" : ""}" onclick="mostrar('${c}')">${c}</button>`
+      ).join("");
+    }
+
+    mostrar("todo");
+  </script>
+</body>
+</html>

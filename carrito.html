@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito | Clothing Brand</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Cabecera (igual en todas las páginas) -->
+  <header>
+    <div class="contenedor">
+      <a href="index.html" class="logo">Clothing Brand</a>
+      <nav>
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="carrito.html">Carrito <span id="contador-carrito">0</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <section>
+    <div class="contenedor">
+      <h2>Tu carrito</h2>
+      <div id="carrito"></div>
+    </div>
+  </section>
+
+  <footer>© 2026 Clothing Brand · Todos los derechos reservados</footer>
+
+  <!-- Primero los datos, luego las funciones comunes, luego el script de la página -->
+  <script src="js/productos.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    function pintarCarrito() {
+      const carrito = leerCarrito();
+      const caja = document.getElementById("carrito");
+
+      if (carrito.length === 0) {
+        caja.innerHTML = '<p>Tu carrito está vacío. <a href="catalogo.html"><u>Ir al catálogo</u></a></p>';
+        return;
+      }
+
+      let total = 0;
+      const lineas = carrito.map((item, index) => {
+        const p = buscarProducto(item.id);
+        const subtotal = p.precio * item.cantidad;
+        total += subtotal;
+        return `
+          <div class="linea">
+            ${htmlImagen(p)}
+            <div>
+              <strong>${p.nombre}</strong><br>
+              <span class="precio">Talla ${item.talla} · ${formatearPrecio(p.precio)}</span>
+            </div>
+            <div class="cantidad">
+              <button onclick="cambiar(${index}, -1)">−</button>
+              <span>${item.cantidad}</span>
+              <button onclick="cambiar(${index}, 1)">+</button>
+            </div>
+            <strong>${formatearPrecio(subtotal)}</strong>
+          </div>`;
+      }).join("");
+
+      caja.innerHTML = lineas + `
+        <div class="total">
+          Total: <strong>${formatearPrecio(total)}</strong><br>
+          <button class="boton" onclick="pagar()">Finalizar compra</button>
+        </div>`;
+    }
+
+    function cambiar(index, cambio) {
+      cambiarCantidad(index, cambio);
+      pintarCarrito();
+    }
+
+    // El pago real (Stripe) se conectará más adelante
+    function pagar() {
+      alert("El pago todavía no está conectado. Lo añadiremos con Stripe.");
+    }
+
+    pintarCarrito();
+  </script>
+</body>
+</html>

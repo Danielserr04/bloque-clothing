@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio | Clothing Brand</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Cabecera (igual en todas las páginas) -->
+  <header>
+    <div class="contenedor">
+      <a href="index.html" class="logo">Clothing Brand</a>
+      <nav>
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="carrito.html">Carrito <span id="contador-carrito">0</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Portada -->
+  <div class="hero">
+    <h1>Nueva colección</h1>
+    <p>Ropa urbana, básicos de calidad y diseño propio.</p>
+    <a href="catalogo.html" class="boton">Ver catálogo</a>
+  </div>
+
+  <section>
+    <div class="contenedor">
+      <h2>Destacados</h2>
+      <div class="rejilla" id="destacados"></div>
+    </div>
+  </section>
+
+  <footer>© 2026 Clothing Brand · Todos los derechos reservados</footer>
+
+  <!-- Primero los datos, luego las funciones comunes, luego el script de la página -->
+  <script src="js/productos.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    // Mostramos los 4 primeros productos como destacados
+    const destacados = PRODUCTOS.slice(0, 4);
+    document.getElementById("destacados").innerHTML = destacados.map(htmlTarjeta).join("");
+  </script>
+</body>
+</html>
