@@ -1,0 +1,29 @@
+:root {
+  /* Base 4, densidad alta. */
+  --space-0: 0px;
+  --space-1: 2px;
+  --space-2: 4px;
+  --space-3: 8px;
+  --space-4: 12px;
+  --space-5: 16px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 48px;
+  --space-9: 64px;
+  --space-10: 96px;
+  --space-11: 128px;
+
+  --gutter: var(--space-5);
+  --page-pad: var(--space-6);
+  --max-width: 1440px;
+  --columns: 12; /* @kind other */
+
+  /* Radios: no hay. El sistema es ortogonal. */
+  --radius-none: 0px;
+  --radius: var(--radius-none);
+
+  /* Bordes */
+  --border-hair: 1px;
+  --border-strong: 2px;
+  --border-slab: 4px;
+}

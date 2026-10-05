@@ -1,0 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
+
+/* Archivo (variable, wdth 62-125 / wght 100-900) cubre el eje fino<->negrita del sistema.
+   JetBrains Mono es la voz de datos, etiquetas y chrome.
+   SUSTITUCION: no se entregaron binarios de fuente; ambas son Google Fonts. */
+:root {
+  --font-display: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}

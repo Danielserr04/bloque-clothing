@@ -1,13 +1,22 @@
 // Catálogo de productos de ejemplo.
 // Para añadir un producto, copia un bloque { ... } y cambia sus datos.
-// "imagen": ruta a una foto en /img (si está vacía se muestra un color de fondo).
+// - ref:       código del producto (se muestra como "REF. 0042")
+// - seccion:   se usa para los filtros del catálogo
+// - stock:     unidades disponibles (0 = agotado)
+// - agotadas:  tallas sin stock (salen tachadas)
+// - marca:     símbolo que se dibuja cuando no hay foto
+// - imagen:    ruta a una foto en /img (si está vacía se muestra la retícula con el símbolo)
+const SECCIONES = ["Todo", "Camisetas", "Pantalones", "Abrigos", "Punto", "Calzado"];
+
 const PRODUCTOS = [
-  { id: 1, nombre: "Camiseta Básica Negra", categoria: "camisetas", precio: 19.99, color: "#222222", imagen: "", tallas: ["S", "M", "L", "XL"], descripcion: "Camiseta de algodón 100% con corte regular. Un básico que combina con todo." },
-  { id: 2, nombre: "Camiseta Oversize Blanca", categoria: "camisetas", precio: 24.99, color: "#e9e6e0", imagen: "", tallas: ["S", "M", "L", "XL"], descripcion: "Corte amplio y tejido grueso para un look urbano." },
-  { id: 3, nombre: "Sudadera Logo Gris", categoria: "sudaderas", precio: 44.99, color: "#8a8d91", imagen: "", tallas: ["S", "M", "L", "XL"], descripcion: "Sudadera con capucha, interior perchado y logo bordado." },
-  { id: 4, nombre: "Sudadera Crew Verde", categoria: "sudaderas", precio: 39.99, color: "#4b5d48", imagen: "", tallas: ["M", "L", "XL"], descripcion: "Cuello redondo, tacto suave y color verde oliva." },
-  { id: 5, nombre: "Pantalón Cargo Beige", categoria: "pantalones", precio: 49.99, color: "#c8b59a", imagen: "", tallas: ["38", "40", "42", "44"], descripcion: "Pantalón cargo con bolsillos laterales y ajuste relajado." },
-  { id: 6, nombre: "Gorra Clásica", categoria: "accesorios", precio: 14.99, color: "#2f3e5c", imagen: "", tallas: ["Única"], descripcion: "Gorra de seis paneles con cierre ajustable." }
+  { id: 1, ref: "0042", nombre: "Camiseta caja 240g", seccion: "Camisetas", precio: 28.00, stock: 12, marca: "■", color: "Negro", imagen: "", tallas: ["S", "M", "L", "XL"], agotadas: ["S"], descripcion: "Algodón peinado 240 g, corte caja, cuello reforzado." },
+  { id: 2, ref: "0043", nombre: "Pantalón carpenter", seccion: "Pantalones", precio: 74.00, stock: 4, marca: "▮", color: "Crudo", imagen: "", tallas: ["38", "40", "42", "44"], agotadas: [], descripcion: "Lona de algodón 12 oz, pierna recta, martillera lateral." },
+  { id: 3, ref: "0055", nombre: "Parka técnica", seccion: "Abrigos", precio: 189.00, stock: 2, marca: "▲", color: "Negro", imagen: "", tallas: ["M", "L", "XL"], agotadas: ["XL"], descripcion: "Nylon recubierto, costuras selladas, capucha ajustable." },
+  { id: 4, ref: "0061", nombre: "Jersey lana gruesa", seccion: "Punto", precio: 96.00, stock: 6, marca: "●", color: "Gris", imagen: "", tallas: ["S", "M", "L"], agotadas: [], descripcion: "Lana virgen, punto inglés, cuello alto." },
+  { id: 5, ref: "0072", nombre: "Bota de cuero", seccion: "Calzado", precio: 168.00, stock: 0, marca: "◆", color: "Negro", imagen: "", tallas: ["41", "42", "43", "44"], agotadas: ["41", "42", "43", "44"], descripcion: "Cuero engrasado, suela cosida, horma ancha." },
+  { id: 6, ref: "0080", nombre: "Camisa overshirt", seccion: "Camisetas", precio: 82.00, stock: 8, marca: "▬", color: "Verde", imagen: "", tallas: ["S", "M", "L", "XL"], agotadas: [], descripcion: "Sarga de algodón, doble bolsillo, botón de corozo." },
+  { id: 7, ref: "0091", nombre: "Vaquero rígido", seccion: "Pantalones", precio: 110.00, stock: 3, marca: "▯", color: "Índigo", imagen: "", tallas: ["38", "40", "42"], agotadas: [], descripcion: "Denim selvedge 14 oz sin lavar. Encoge media talla." },
+  { id: 8, ref: "0103", nombre: "Gorro punto", seccion: "Punto", precio: 24.00, stock: 20, marca: "◐", color: "Negro", imagen: "", tallas: ["Única"], agotadas: [], descripcion: "Lana merino, vuelta doble." }
 ];
 
 // Devuelve un producto a partir de su id
