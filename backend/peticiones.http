@@ -34,8 +34,8 @@ POST {{api}}/productos
 Authorization: Bearer PEGA_AQUI_EL_TOKEN
 Content-Type: application/json
 
-{ "nombre": "Sudadera Nueva", "categoria": "sudaderas", "precio": 49.90,
-  "color": "#111111", "tallas": ["S","M","L"], "descripcion": "Prueba" }
+{ "ref": "0120", "nombre": "Sudadera Nueva", "seccion": "Punto", "precio": 49.90, "stock": 10,
+  "marca": "■", "color": "Negro", "tallas": ["S","M","L"], "agotadas": ["S"], "descripcion": "Prueba" }
 
 ### 7. Pedir tokens nuevos con el refresh token (el viejo deja de valer)
 POST {{api}}/auth/refresh

@@ -13,24 +13,30 @@ public final class ProductoDtos {
     }
 
     public record ProductoRequest(
+            @Size(max = 10) String ref,
             @NotBlank @Size(max = 120) String nombre,
-            @Size(max = 60) String categoria,
+            @Size(max = 60) String seccion,
             @NotNull @DecimalMin(value = "0.01") @Digits(integer = 8, fraction = 2) BigDecimal precio,
-            @Pattern(regexp = "^#[0-9a-fA-F]{6}$", message = "debe ser un color tipo #1a2b3c") String color,
+            @NotNull @Min(0) @Max(100000) Integer stock,
+            @Size(max = 4) String marca,
+            @Size(max = 40) String color,
             @Size(max = 300) String imagen,
             @Size(max = 20) List<@NotBlank @Size(max = 20) String> tallas,
+            @Size(max = 20) List<@NotBlank @Size(max = 20) String> agotadas,
             @Size(max = 2000) String descripcion) {
 
         public Producto aDominio() {
-            return new Producto(null, nombre, categoria, precio, color, imagen, tallas, descripcion);
+            return new Producto(null, ref, nombre, seccion, precio, stock, marca, color, imagen, tallas, agotadas,
+                    descripcion);
         }
     }
 
-    public record ProductoResponse(Long id, String nombre, String categoria, BigDecimal precio,
-                                   String color, String imagen, List<String> tallas, String descripcion) {
+    public record ProductoResponse(Long id, String ref, String nombre, String seccion, BigDecimal precio, int stock,
+                                   String marca, String color, String imagen, List<String> tallas,
+                                   List<String> agotadas, String descripcion) {
         public static ProductoResponse de(Producto p) {
-            return new ProductoResponse(p.id(), p.nombre(), p.categoria(), p.precio(),
-                    p.color(), p.imagen(), p.tallas(), p.descripcion());
+            return new ProductoResponse(p.id(), p.ref(), p.nombre(), p.seccion(), p.precio(), p.stock(),
+                    p.marca(), p.color(), p.imagen(), p.tallas(), p.agotadas(), p.descripcion());
         }
     }
 }

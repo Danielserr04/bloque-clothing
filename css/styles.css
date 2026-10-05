@@ -415,3 +415,38 @@ a { border-bottom: 0; }
   .rejilla { padding: var(--space-5); grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
   .precio-grande { font-size: 48px; }
 }
+
+/* ===== CUENTA (entrar / registro) ===== */
+.cuenta { display: grid; grid-template-columns: 1fr 1fr; }
+.cuenta-bloque { padding: var(--space-9) var(--space-6) var(--space-10); }
+.cuenta-bloque + .cuenta-bloque { border-left: var(--border-hair) solid var(--line-strong); }
+.cuenta-bloque h1 { margin: var(--space-5) 0 var(--space-7); font-size: clamp(40px, 6vw, 72px); font-variation-settings: "wdth" 80; }
+.formulario { display: flex; flex-direction: column; gap: var(--space-5); max-width: 380px; }
+.formulario label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--text-faint);
+}
+.formulario input {
+  padding: 12px;
+  border: var(--border-hair) solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  font: var(--type-body);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.formulario input:hover { border-color: var(--ink-400); }
+.formulario input:focus { border-color: var(--ink-000); }
+.formulario small { text-transform: none; letter-spacing: 0; font-family: var(--font-body); }
+.formulario .boton { align-self: flex-start; }
+
+@media (max-width: 760px) {
+  .cuenta { grid-template-columns: 1fr; }
+  .cuenta-bloque { padding: var(--space-7) var(--space-5); }
+  .cuenta-bloque + .cuenta-bloque { border-left: 0; border-top: var(--border-hair) solid var(--line-strong); }
+}

@@ -1,4 +1,5 @@
-// Catálogo de productos de ejemplo.
+// Catálogo de productos de RESPALDO: se usa si el backend no está arrancado.
+// Los productos de verdad vienen de la API (ver js/api.js).
 // Para añadir un producto, copia un bloque { ... } y cambia sus datos.
 // - ref:       código del producto (se muestra como "REF. 0042")
 // - seccion:   se usa para los filtros del catálogo
@@ -8,7 +9,7 @@
 // - imagen:    ruta a una foto en /img (si está vacía se muestra la retícula con el símbolo)
 const SECCIONES = ["Todo", "Camisetas", "Pantalones", "Abrigos", "Punto", "Calzado"];
 
-const PRODUCTOS = [
+let PRODUCTOS = [
   { id: 1, ref: "0042", nombre: "Camiseta caja 240g", seccion: "Camisetas", precio: 28.00, stock: 12, marca: "■", color: "Negro", imagen: "", tallas: ["S", "M", "L", "XL"], agotadas: ["S"], descripcion: "Algodón peinado 240 g, corte caja, cuello reforzado." },
   { id: 2, ref: "0043", nombre: "Pantalón carpenter", seccion: "Pantalones", precio: 74.00, stock: 4, marca: "▮", color: "Crudo", imagen: "", tallas: ["38", "40", "42", "44"], agotadas: [], descripcion: "Lona de algodón 12 oz, pierna recta, martillera lateral." },
   { id: 3, ref: "0055", nombre: "Parka técnica", seccion: "Abrigos", precio: 189.00, stock: 2, marca: "▲", color: "Negro", imagen: "", tallas: ["M", "L", "XL"], agotadas: ["XL"], descripcion: "Nylon recubierto, costuras selladas, capucha ajustable." },

@@ -22,6 +22,7 @@
 
   <!-- Primero los datos, luego las funciones comunes, luego el script de la página -->
   <script src="js/productos.js"></script>
+  <script src="js/api.js"></script>
   <script src="js/app.js"></script>
   <script>
     function mostrar(seccion) {
@@ -36,7 +37,8 @@
         botones + `<span class="label contador">${dosCifras(lista.length)} prendas</span>`;
     }
 
-    mostrar("Todo");
+    // Primero pedimos los productos al backend y luego pintamos
+    cargarProductos().then(() => mostrar("Todo"));
   </script>
 </body>
 </html>

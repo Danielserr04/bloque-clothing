@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuenta | BLOQUE</title>
+  <link rel="icon" href="img/isotipo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- La cabecera y el pie se pintan desde js/app.js -->
+  <div id="cabecera" data-activa="cuenta"></div>
+
+  <div class="cuenta" id="cuenta"></div>
+
+  <div id="pie"></div>
+
+  <!-- Primero los datos, luego las funciones comunes, luego el script de la página -->
+  <script src="js/productos.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const caja = document.getElementById("cuenta");
+    // Si venimos del carro (cuenta.html?volver=carrito), al entrar volvemos allí
+    const volver = new URLSearchParams(window.location.search).get("volver") === "carrito";
+
+    async function pintar() {
+      const usuario = await quienSoy();
+      if (usuario) pintarPerfil(usuario);
+      else pintarFormularios();
+    }
+
+    // ----- Con sesión: datos del usuario y botón de salir -----
+    function pintarPerfil(usuario) {
+      caja.innerHTML = `
+        <section class="cuenta-bloque">
+          <span class="label">Sesión iniciada</span>
+          <h1>HOLA</h1>
+          <table class="tabla-tecnica">
+            <tr><th>Email</th><td>${escapar(usuario.email)}</td></tr>
+            <tr><th>Rol</th><td>${escapar(usuario.roles.join(", "))}</td></tr>
+          </table>
+          <div class="ficha-botones">
+            <a href="catalogo.html" class="boton boton-senal">Ir a la tienda</a>
+            <button class="boton" onclick="cerrarSesion()">Salir</button>
+          </div>
+        </section>`;
+    }
+
+    async function cerrarSesion() {
+      await salir();
+      window.location.href = "cuenta.html";
+    }
+
+    // ----- Sin sesión: formulario de entrar y de registro -----
+    function pintarFormularios() {
+      caja.innerHTML = `
+        <section class="cuenta-bloque">
+          <span class="label">Ya tengo cuenta</span>
+          <h1>ENTRAR</h1>
+          <form id="form-entrar" class="formulario">
+            <label>Email<input type="email" name="email" required autocomplete="email"></label>
+            <label>Contraseña<input type="password" name="password" required autocomplete="current-password"></label>
+            <button class="boton boton-lg boton-senal" type="submit">Entrar</button>
+            <p class="error" id="error-entrar"></p>
+          </form>
+        </section>
+        <section class="cuenta-bloque">
+          <span class="label">Soy nuevo</span>
+          <h1><span class="fino">CREAR</span> CUENTA</h1>
+          <form id="form-registro" class="formulario">
+            <label>Nombre<input type="text" name="nombre" maxlength="100" autocomplete="name"></label>
+            <label>Email<input type="email" name="email" required autocomplete="email"></label>
+            <label>Contraseña<input type="password" name="password" required minlength="8" autocomplete="new-password">
+              <small>Mínimo 8 caracteres, con letras y números</small></label>
+            <button class="boton boton-lg" type="submit">Crear cuenta</button>
+            <p class="error" id="error-registro"></p>
+          </form>
+        </section>`;
+
+      document.getElementById("form-entrar").addEventListener("submit", async (evento) => {
+        evento.preventDefault(); // que el formulario no recargue la página
+        const datos = new FormData(evento.target);
+        await enviar("error-entrar", () => entrar(datos.get("email"), datos.get("password")));
+      });
+
+      document.getElementById("form-registro").addEventListener("submit", async (evento) => {
+        evento.preventDefault();
+        const datos = new FormData(evento.target);
+        await enviar("error-registro", () => registrarse(datos.get("nombre"), datos.get("email"), datos.get("password")));
+      });
+    }
+
+    // Ejecuta entrar/registrarse y muestra el error si falla
+    async function enviar(idError, accion) {
+      const error = document.getElementById(idError);
+      error.textContent = "";
+      try {
+        await accion();
+        window.location.href = volver ? "carrito.html" : "cuenta.html";
+      } catch (e) {
+        error.textContent = e.message;
+      }
+    }
+
+    pintar();
+  </script>
+</body>
+</html>
